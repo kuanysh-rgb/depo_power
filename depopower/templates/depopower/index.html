@@ -27,8 +27,8 @@
       overflow:hidden;padding:10px 5px;word-break:normal;}
     .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:16px;
       font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-    .tg .tg-baqh{text-align:center;vertical-align:top}
-    .tg .tg-0lax{text-align:left;vertical-align:top}
+    .tg .tg-baqh{text-align:center;vertical-align:inherit}
+    .tg .tg-0lax{text-align:left;vertical-align:inherit}
     table, th, td {
   border: 1px solid;
 }
@@ -60,6 +60,7 @@
 .styled-table tbody tr:last-of-type {
     border-bottom: 2px solid #5C6A76;
 }
+
     </style>
 </head>
 <body>
@@ -73,7 +74,7 @@
   <div class=" collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav ms-auto ">
       <li class="nav-item">
-        <a class="nav-link mx-2 active" aria-current="page" href="{% url 'home' %}">Home</a>
+        <a class="nav-link mx-2 active" aria-current="page" href="{% url 'edit' %}">Edit</a>
       </li>
       <li class="nav-item">
         <a class="nav-link mx-2" href="#">Locomotives</a>
@@ -98,12 +99,12 @@
 
     <div class="container" style="width:80%; height: 100%;">
     <br />
-    <h3>Итоговый график локомотивов</h3><br />
+    <br />
 
-        <table class="tg styled-table" style="undefined;table-layout: fixed; width: 949px">
+        <table class="tg styled-table" style="table-layout: fixed; width: 980px">
 <colgroup>
-<col style="width: 82px">
 <col style="width: 120px">
+<col style="width: 100px">
 <col style="width: 82px">
 <col style="width: 82px">
 <col style="width: 82px">
@@ -119,8 +120,9 @@
 </colgroup>
 <thead>
   <tr>
-    <th class="tg-0lax"></th>
-    <th class="tg-baqh">Locomotives</th>
+    <th class="tg-0lax">Locomotives</th>
+    <th class="tg-0lax">Techworks</th>
+
 
     {% for month in month_data %}
     <th class="tg-baqh">{{ month.month }} [{{ month.year }}]</th>
@@ -128,32 +130,219 @@
   </tr>
 </thead>
 <tbody>
-  {% for techwork in available_techworks %}
-  <tr>
 
-    <td class="tg-baqh">{{ techwork.to_name }}</td>
-    <td class="tg-baqh"><a class="btn btn-outline-primary" style="width: 80px;" href="{% url 'add' techwork.to_name %}">Add</a></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
-      <td class="tg-baqh"></td>
+{% for machine in loco_data %}
+ <tr>
+    {% if machine.model_name != 'Свободно' %}
+        {% if machine.model_name != 'Профильное' %}
+            <td class="tg-baqh" rowspan="5" style="vertical-align: inherit; width: 140px;">
+                {{ machine.model_name }}
+            </td>
+{% for techwork_data in available_techworks %}
+    <tr>
+    <td class="tg-baqh">{{ techwork_data.to_name }}</td>
+        <td class="tg-baqh">
+        {% for cellrecordjan in cell_records_jan %}
+            {% if cellrecordjan.locomotive == machine %}
+                {% if cellrecordjan.techwork == techwork_data %}
+        {{ cellrecordjan.volume.normalize }}
+                {% endif %}
+            {% endif %}
 
-  </tr>
-  {% endfor %}
+        {% endfor %}
+    </td>
+
+        <!--      <td class="tg-baqh"><div style="position: relative; display: inline-block;top: 0;right: 0;bottom: 0;left: 0; width: 50px;"><input id="inputnumber" type="number" step="0.5" style="width: 100%; display: block;"></div></td>-->
+         <td class="tg-baqh">
+        {% for cellrecordfeb in cell_records_feb %}
+
+            {% if cellrecordfeb.locomotive == machine %}
+                {% if cellrecordfeb.techwork == techwork_data %}
+        {{ cellrecordfeb.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+        </td>
+        <td class="tg-baqh">
+      {% for cellrecordmar in cell_records_mar %}
+
+            {% if cellrecordmar.locomotive == machine %}
+                {% if cellrecordmar.techwork == techwork_data %}
+        {{ cellrecordmar.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+        </td>
+    <td class="tg-baqh">
+     {% for cellrecordapr in cell_records_apr %}
+
+            {% if cellrecordapr.locomotive == machine %}
+                {% if cellrecordapr.techwork == techwork_data %}
+        {{ cellrecordapr.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    <td class="tg-baqh">
+      {% for cellrecordmay in cell_records_may %}
+
+            {% if cellrecordmay.locomotive == machine %}
+                {% if cellrecordmay.techwork == techwork_data %}
+        {{ cellrecordmay.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    <td class="tg-baqh">
+      {% for cellrecordjun in cell_records_jun %}
+
+            {% if cellrecordjun.locomotive == machine %}
+                {% if cellrecordjun.techwork == techwork_data %}
+        {{ cellrecordjun.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    <td class="tg-baqh">
+      {% for cellrecordjul in cell_records_jul %}
+
+            {% if cellrecordjul.locomotive == machine %}
+                {% if cellrecordjul.techwork == techwork_data %}
+        {{ cellrecordjul.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    <td class="tg-baqh">
+      {% for cellrecordaug in cell_records_aug %}
+
+            {% if cellrecordaug.locomotive == machine %}
+                {% if cellrecordaug.techwork == techwork_data %}
+        {{ cellrecordaug.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    <td class="tg-baqh">
+      {% for cellrecordsep in cell_records_sep %}
+
+            {% if cellrecordsep.locomotive == machine %}
+                {% if cellrecordsep.techwork == techwork_data %}
+        {{ cellrecordsep.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    <td class="tg-baqh">
+      {% for cellrecordoct in cell_records_oct %}
+
+            {% if cellrecordoct.locomotive == machine %}
+                {% if cellrecordoct.techwork == techwork_data %}
+        {{ cellrecordoct.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    <td class="tg-baqh">
+      {% for cellrecordnov in cell_records_nov %}
+
+            {% if cellrecordnov.locomotive == machine %}
+                {% if cellrecordnov.techwork == techwork_data %}
+        {{ cellrecordnov.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+
+    <td class="tg-baqh">
+      {% for cellrecorddec in cell_records_dec %}
+
+            {% if cellrecorddec.locomotive == machine %}
+                {% if cellrecorddec.techwork == techwork_data %}
+        {{ cellrecorddec.volume.normalize }}
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </td>
+    </tr>
+
+    {% endfor %}
+
+    {% endif %}
+    {% endif %}
 
 
+    {% endfor %}
+    <tr>
+
+        <td class="tg-baqh" colspan="2" style="font-weight: bold">Всего кол-во ед.</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_jan.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_feb.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_mar.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_apr.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_may.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_jun.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_jul.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_aug.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_sep.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_oct.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_nov.normalize }}</td>
+        <td class="tg-baqh" style="font-weight: bold">{{ sum_dec.normalize }}</td>
+
+    </tr>
+
+    <tr>
+        <td class="tg-baqh" colspan="2" style="font-weight: bold">Доступные стойло-дни</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_jan }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_feb }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_mar }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_apr }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_may }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_jun }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_jul }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_aug }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_sep }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_oct }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_nov }}</td>
+        <td class="tg-baqh" style="font-weight: bold; color: blue;">{{ st_dni_dec }}</td>
+
+    </tr>
+
+    <tr>
+        <td class="tg-baqh" colspan="2" style="font-weight: bold">Загруженность</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_jan }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_feb }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_mar }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_apr }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_may }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_jun }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_jul }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_aug }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_sep }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_oct }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_nov }}%</td>
+        <td class="tg-baqh" style="font-weight: bold; color: red;">{{ percentage_dec }}%</td>
+
+    </tr>
 </tbody>
+
+
+
 </table>
+
 <br /><br />
-    <h4>Загруженность ДЕПО - {{ percentage }}%</h4>
+    <h4>Загруженность ДЕПО на 2023 год - {{ percentage }}%</h4>
 
     <div class="progress" style="width: 55%; height: 30px;float: left">
       <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage }}"
@@ -162,7 +351,7 @@
       </div>
     </div>
 
-    <div style="width: 30%; float: left; margin-left: 10%;">
+    <!--<div style="width: 30%; float: left; margin-left: 10%;">
         <table class="styled-table" style="height: 240px; border: none;">
         <colgroup>
 <col style="width: 100px">
@@ -202,8 +391,11 @@
             </tr>
             </tbody>
         </table>
-    </div>
+    </div>-->
 
     </div>
+    <div style="height: 100px; width: 100%;"></div>
+
 </body>
+
 </html>

@@ -30,16 +30,10 @@ class AvailableTechwork(models.Model):
 class TechWork(models.Model):
     to_name = models.TextField("Name of TO", default='None', max_length=144)
     model_name = models.ForeignKey('Locomotive', on_delete=models.CASCADE)
-    hours = models.DecimalField("Count of hours", decimal_places=1, max_digits=4)
-    days = models.FloatField("Count of days", default=0, editable=False)
+    norms_in_days = models.FloatField("Norms in days", default=0)
 
     def __int__(self):
-        return self.to_name + str(self.model_name)
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        if self._state.adding:
-            self.days = (float(self.hours / 24) * 1.5)
-        super().save(force_insert, force_update, using, update_fields)
+        return str(self.model_name) + str(self.to_name)
 
     class Meta:
         verbose_name = "TechWork"
@@ -70,8 +64,21 @@ class Canava(models.Model):
     def __str__(self):
         return "Column " + str(self.place_column) + " - " + "Row " + str(self.place_row)
 
-
-
     class Meta:
         verbose_name = "Canava"
         verbose_name_plural = "Canavas"
+
+
+class CellRecord(models.Model):
+    locomotive = models.ForeignKey('Locomotive', on_delete=models.CASCADE, default='Свободно')
+    techwork = models.ForeignKey('AvailableTechwork', on_delete=models.CASCADE, default='TO-3')
+    month = models.ForeignKey('MonthWorkDay', on_delete=models.CASCADE, default='Dec[2023]')
+    volume = models.DecimalField("Volume", decimal_places=1, max_digits=3)
+
+    def __str__(self):
+        return str(self.locomotive) + ' - ' + str(self.techwork) + ' - ' + str(self.month)
+
+    class Meta:
+        verbose_name = "CellRecord"
+        verbose_name_plural = "CellRecords"
+        unique_together = (("locomotive", "techwork", "month"),)

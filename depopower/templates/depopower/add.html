@@ -139,13 +139,7 @@
 
      var machine = $("#machine_select");
      var sections = $("#sections_select");
-     var startdate = $("input[name='start_date']")
-     var enddate = $("input[name='end_date]")
      var $options = sections.find('option');
-
-     startdate.on('change', function(){
-         enddate.val(this.value+)
-     }).trigger('change');
 
      machine.on('change',function(){
         sections.html($options.filter('[value="'+ this.value  +'"]'));

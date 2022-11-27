@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-8v9f+kdi9=8rc^n3#t*@gnun-)*2ycioiidskcce9wqga%w8si
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['185.233.3.55']
+ALLOWED_HOSTS = ['185.233.3.55','localhost','127.0.0.1']
 
 # Application definition
 
@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'rlsdepo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'rls-depo',
+        'NAME': 'rls_depo',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
