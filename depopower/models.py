@@ -1,7 +1,8 @@
 from django.db import models
 
-
 # Create your models here.
+from django.db.models import F
+
 
 class Locomotive(models.Model):
     model_name = models.TextField("Name of Model", primary_key=True)
@@ -70,10 +71,10 @@ class Canava(models.Model):
 
 
 class CellRecord(models.Model):
-    locomotive = models.ForeignKey('Locomotive', on_delete=models.CASCADE, default='Свободно')
+    locomotive = models.ForeignKey('Locomotive', on_delete=models.CASCADE, default='ТЭМ2')
     techwork = models.ForeignKey('AvailableTechwork', on_delete=models.CASCADE, default='TO-3')
     month = models.ForeignKey('MonthWorkDay', on_delete=models.CASCADE, default='Dec[2023]')
-    volume = models.DecimalField("Volume", decimal_places=1, max_digits=3)
+    volume = models.DecimalField("Volume", decimal_places=1, max_digits=3, editable=False, default=1)
 
     def __str__(self):
         return str(self.locomotive) + ' - ' + str(self.techwork) + ' - ' + str(self.month)
@@ -82,3 +83,14 @@ class CellRecord(models.Model):
         verbose_name = "CellRecord"
         verbose_name_plural = "CellRecords"
         unique_together = (("locomotive", "techwork", "month"),)
+
+    def save(self, *args, **kwargs):
+        try:
+            ids = CellRecord.objects.get(id=self.id)
+        except CellRecord.DoesNotExist:
+            ids = None
+        if ids:  # if some items are found in the database
+            self.volume = ids.volume + 1
+            return super(CellRecord, self).save(*args, **kwargs)
+        else:
+            return super(CellRecord, self).save(*args, **kwargs)

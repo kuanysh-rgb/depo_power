@@ -21,6 +21,6 @@ import depopower.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', depopower.views.main, name='home'),
-    path('add/<str:to_name>', depopower.views.add, name='add'),
     path('edit/', depopower.views.edit, name='edit'),
+    path('submit/', depopower.views.submit, name='submit'),
 ]

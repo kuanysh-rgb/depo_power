@@ -1,10 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Depo Power</title>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        body{
+            background-color: white;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:16px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-baqh{text-align:center;vertical-align:inherit}
+    .tg .tg-0lax{text-align:left;vertical-align:inherit}
+    table, th, td {
+  border: 1px solid;
+}
+    .styled-table {
+    border-collapse: collapse;
+    margin: 0 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+    .styled-table thead tr {
+    background-color: #5C6A76;
+    color: #ffffff;
+    text-align: left;
+}
+    .styled-table th,
+.styled-table td {
+    padding: 6px 15px;
+}
+    .styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #5C6A76;
+}
+
+    </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+<div class="container-fluid">
+  <a class="navbar-brand" href="{% url 'home' %}">Мощность ДЕПО</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
+  <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav ms-auto ">
+      <li class="nav-item">
+        <a class="nav-link mx-2 active" aria-current="page" href="{% url 'edit' %}">Edit</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link mx-2" href="#">Locomotives</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link mx-2" href="#">Techworks</a>
+      </li>
+        <!--<li class="nav-item dropdown">
+        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Company
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="#">Blog</a></li>
+          <li><a class="dropdown-item" href="#">About Us</a></li>
+          <li><a class="dropdown-item" href="#">Contact us</a></li>
+        </ul>
+      </li>-->
+    </ul>
+  </div>
+</div>
+</nav>
+
+<div class="container" style="width:60%; height: 100%;">
+    <br />
+    <br />
+    <h3>Add record to cell form</h3>
+<br />
+<br />
+    <form id="formAdd" action="{% url 'submit' %}" method="post" enctype="multipart/form-data" style="font-size: 18px;">
+            {% csrf_token %}
+            <div style="; flex-direction: row; width: 400px;">
+            <p style="">Сhoose locomotive</p>
+            <select name="machine_name" id="machine_select" style=" width: 40%; " class="form-select form-select-sm">
+
+                {% for machine in loco_data %}
+                    {% if machine.model_name != 'Свободно' %}
+                        {% if machine.model_name != 'Профильное' %}
+                        <option>{{ machine}}</option>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </select>
+            </div>
+            <br />
+
+            <div style="">
+            <p style="">Choose techwork</p>
+            <select name="techwork_name" id="techwork_select" style=" width: 40%; " class="form-select form-select-sm">
+
+                {% for techwork in available_techworks %}
+                    <option>{{ techwork.to_name }}</option>
+                {% endfor %}
+            </select>
+            </div>
+
+            <br />
+
+            <div style="">
+            <p style="">Choose month of works (2023)</p>
+            <select name="month_name" id="month_select" style=" width: 40%; " class="form-select form-select-sm">
+
+                {% for month_d in month_data %}
+                    <option>{{ month_d.month }}</option>
+                {% endfor %}
+            </select>
+            </div>
+    <br />
+        <p style="" id="month_par">Month loaded for:</p>
+        <div class="progress" style="width: 70%; height: 30px;">
+          <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="0" style="width: 0%;"
+          aria-valuemin="0" aria-valuemax="100">
+            0%
+          </div>
+        </div>
+    <br />
+
+    <input  type="submit" class="btn btn-primary" value="Submit">
+    </form>
+</div>
 </body>
+<script>
+    $(document).ready(function(){
+     var monthSelect = $("#month_select");
+     var locoSelect = $("#machine_select");
+     var toSelect = $("#techwork_select");
+
+
+     monthSelect.on('change',function(){
+         let percentage = 0.0;
+         if (this.value.toLowerCase() === 'jan') {
+             percentage = {{ percentage_jan }}
+         }
+         if (this.value.toLowerCase() === 'feb') {
+             percentage = {{ percentage_feb }}
+         }
+         if (this.value.toLowerCase() === 'mar') {
+             percentage = {{ percentage_mar }}
+         }
+         if (this.value.toLowerCase() === 'apr') {
+             percentage = {{ percentage_apr }}
+         }
+         if (this.value.toLowerCase() === 'may') {
+             percentage = {{ percentage_may }}
+         }
+         if (this.value.toLowerCase() === 'jun') {
+             percentage = {{ percentage_jun }}
+         }
+         if (this.value.toLowerCase() === 'jul') {
+             percentage = {{ percentage_jul }}
+         }
+         if (this.value.toLowerCase() === 'aug') {
+             percentage = {{ percentage_aug }}
+         }
+         if (this.value.toLowerCase() === 'sep') {
+             percentage = {{ percentage_sep }}
+         }
+         if (this.value.toLowerCase() === 'oct') {
+             percentage = {{ percentage_oct }}
+         }
+         if (this.value.toLowerCase() === 'nov') {
+             percentage = {{ percentage_nov }}
+         }
+         if (this.value.toLowerCase() === 'dec') {
+             percentage = {{ percentage_dec }}
+         }
+        $("#progressBar").attr('aria-valuenow', percentage);
+        document.getElementById('progressBar').style.width = percentage + "%";
+        document.getElementById("progressBar").innerHTML = percentage + "%";
+        document.getElementById("month_par").innerHTML = this.value + " loaded for:";
+     }).trigger('change');
+
+});
+
+
+</script>
 </html>
